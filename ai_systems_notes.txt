@@ -1,0 +1,25 @@
+AI SYSTEMS NOTES FOR TESTING THE RESEARCH ASSISTANT
+
+Retrieval-Augmented Generation (RAG)
+Retrieval-Augmented Generation combines information retrieval with language-model generation. Before answering a user's question, a system searches a collection of external documents and gives the most relevant passages to a language model as context. RAG can make answers more relevant to a private or changing knowledge base, and citations can help users inspect the source material. RAG does not guarantee correctness: retrieval can miss evidence, documents can be outdated, and the language model can still misinterpret the context.
+
+Document chunking
+Long documents are often split into smaller chunks before indexing. Very large chunks may contain many unrelated ideas, while very small chunks can lose useful context. Overlapping chunks can preserve information near boundaries. Chunk size and overlap should be tested against representative questions instead of selected only by intuition.
+
+Embeddings and semantic search
+An embedding maps text to a numeric vector. Semantically related passages may have vectors that are close under a similarity measure such as cosine similarity. A vector search system embeds a user query and ranks stored passage embeddings by similarity. Similarity is a relevance signal, not a probability that a passage is correct.
+
+Hybrid retrieval and reranking
+Keyword retrieval methods such as BM25 are useful when exact names, phrases, or identifiers matter. Dense vector retrieval can find semantically related wording. Hybrid retrieval combines lexical and semantic results. A reranker can then score the query-passage pairs and reorder candidate passages. These additional steps should be compared with a simple dense-retrieval baseline using a labelled evaluation set.
+
+LLM evaluation
+A reliable system needs tests beyond a few successful demonstrations. Retrieval metrics can include Recall@k, Mean Reciprocal Rank (MRR), and normalized Discounted Cumulative Gain (nDCG). Generated answers can be evaluated for correctness, relevance, faithfulness to the provided context, and citation accuracy. Latency, token usage, cost, and failure rate also matter. An LLM-as-a-judge can help, but its scores should be checked against human-labelled examples.
+
+Prompt injection and source trust
+Text retrieved from documents must be treated as untrusted data. A document may contain instructions that conflict with the application's intended behavior. Prompt wording alone is not a complete security boundary. Systems should minimize tool permissions, validate actions outside the model, isolate sensitive information, and test against adversarial documents.
+
+Agentic workflows
+An agentic workflow may decompose a task, call tools, inspect results, and choose a next step. Not every problem needs an autonomous agent. A deterministic workflow is often easier to test and debug. Tool access should be narrow, errors should be handled explicitly, and actions with meaningful consequences should require appropriate approval.
+
+API fundamentals
+An API lets two software components communicate through a defined interface. In a REST-style HTTP API, a client sends a request to an endpoint. HTTP methods commonly include GET for reading, POST for creating or running an operation, and DELETE for removal. JSON is a common request and response format. HTTP status codes communicate outcomes: 200 means success, 400 usually indicates a bad request, 404 means a resource was not found, 500 means an unexpected server error, and 502 or 503 can indicate an upstream provider or configuration problem. API keys are secrets and should be stored in environment variables, not committed to source control.
